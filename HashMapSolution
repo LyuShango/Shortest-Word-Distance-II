@@ -1,0 +1,40 @@
+import java.util.*;
+
+class WordDistance {
+
+    public HashMap<String, ArrayList<Integer>> record = new HashMap<>();
+    
+    public WordDistance(String[] wordsDict) {
+        int len = wordsDict.length;
+        for(int i=0; i<len; i++){
+            if(record.containsKey(wordsDict[i])){
+                ArrayList<Integer> list = record.get(wordsDict[i]);
+                list.add(i);
+                record.put(wordsDict[i], list);
+            }else{
+                ArrayList<Integer> list = new ArrayList<>();
+                list.add(i);
+                record.put(wordsDict[i], list);
+            }
+        }
+    }
+    
+    public int shortest(String word1, String word2) {
+        ArrayList<Integer> list1 = record.get(word1);
+        int len1 = list1.size();
+        ArrayList<Integer> list2 = record.get(word2);
+        int len2 = list2.size();
+        int i = 0;
+        int j = 0;
+        int dst = 0;
+        int ans = Integer.MAX_VALUE;
+        while(i < len1 && j < len2){
+            if(list1.get(i) >= list2.get(j)) dst = list1.get(i) - list2.get(j);
+            else dst = list2.get(j) - list1.get(i);          
+            if(ans > dst) ans = dst;
+            if(list1.get(i) < list2.get(j)) i++;
+            else j++;
+        }
+        return ans;
+    }
+}
